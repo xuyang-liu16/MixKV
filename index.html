@@ -482,6 +482,68 @@
 
     <section class="section">
       <div class="container is-max-desktop">
+        <h2 class="title is-3 section-title has-text-centered">Core Findings</h2>
+    
+        <div class="finding-slider" id="finding-slider">
+          <button class="finding-nav prev" type="button" aria-label="Previous finding">&#9664;</button>
+          <button class="finding-nav next" type="button" aria-label="Next finding">&#9654;</button>
+          <div class="finding-track">
+            <div class="finding-slide active">
+              <div class="finding-card">
+                <img src="static/images/Finding1.png" alt="Finding 1" loading="lazy">
+                <div class="content has-text-justified">
+                  <p><strong>(I) Vision-Language Redundancy Differences:</strong> Visual information in LVLMs contains significantly more semantic redundancy than textual information in LLMs. Images often contain repetitive visual elements (<em>e.g.</em>, similar textures, repeated patterns), leading to higher semantic similarity among KV pairs during vision-language processing. Figure (a) shows that Qwen2-VL exhibits much denser high-similarity regions compared to the more diverse patterns of Qwen2, while Figure (b) reveals that keys in Qwen2 peak around 0.2-0.4 average similarity whereas Qwen2-VL keys peak around 0.6-0.8, a <strong>2-3x increase</strong>. This demonstrates that <strong><em>KV pairs in LVLMs exhibit substantially higher semantic redundancy than in LLMs</em></strong>.</p>
+                </div>
+              </div>
+            </div>
+            <div class="finding-slide">
+              <div class="finding-card">
+                <img src="static/images/Finding2.png" alt="Finding 2" loading="lazy">
+                <div class="content has-text-justified">
+                  <p><strong>(II) Head-wise Redundancy Differences:</strong> Within LVLMs, different attention heads focus on distinct multi-modal aspects. Some heads capture global features with lower redundancy, while others focus on local details with higher semantic similarity. Figure illustrates this phenomenon across multiple tasks: for Qwen2-VL-7B, certain heads show extremely high average similarity exceeding <strong>0.9</strong>, while other heads maintain relatively low similarity below <strong>0.3</strong>. This pattern is consistent across different vision-language tasks, indicating that <strong><em>KV pairs in LVLMs show varying degrees of semantic redundancy across attention heads in the LLM</em></strong>.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="finding-dots" id="finding-dots">
+            <button class="finding-dot active" data-index="0" aria-label="Finding 1"></button>
+            <button class="finding-dot" data-index="1" aria-label="Finding 2"></button>
+          </div>
+        </div>
+    
+        <div style="margin-top: 1rem;">
+          <img src="static/images/Findings.png" alt="Heterogeneous head-wise redundancy" loading="lazy">
+          <div class="content has-text-justified">
+            <p><strong>Heterogeneous head-wise redundancy in LLMs and LVLMs.</strong> For both pure-text and vision-language data, different heads exhibit markedly different redundancy levels, and their overall patterns are highly similar: a head that is relatively more redundant on text remains relatively more redundant on vision-language inputs. We hypothesize that this is because different heads focus on different types of information: some heads primarily attend to local patterns and therefore exhibit higher semantic redundancy, while others capture more global information and consequently show much lower redundancy.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <section class="section is-light">
+      <div class="container is-max-desktop">
+        <h2 class="title is-3 section-title has-text-centered">Overview</h2>
+        <p class="content has-text-justified">We argue that beyond importance, preserving diverse KV pairs at per-head granularity is essential for minimizing semantic redundancy while maintaining comprehensive information coverage. To this end, we propose MixKV, which adopts a principled "<strong>mixing importance with diversity</strong>" approach. Specifically, MixKV extends existing importance-based KV compression methods by incorporating head-wise semantic diversity evaluation. By independently measuring semantic similarity within each attention head, MixKV adaptively balances importance and diversity per head to achieve fine-grained joint optimization of KV cache compression in LVLMs.</p>
+    
+        <div class="columns is-variable is-5">
+          <div class="column is-6">
+            <div class="panel-card">
+              <img src="static/images/MixKV.png" alt="MixKV algorithm pipeline" loading="lazy">
+              <p class="panel-caption">MixKV enables KV cache compression methods (e.g. SnapKV, AdaKV, and SparseMM) to approximate the full original semantic distribution of the uncompressed KV cache more effectively.</p>
+            </div>
+          </div>
+          <div class="column is-6">
+            <div class="panel-card">
+              <img src="static/images/PCA.png" alt="PCA analysis" loading="lazy">
+              <p class="panel-caption">PCA analysis of semantic coverage under KV compression.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container is-max-desktop">
         <h2 class="title is-3 section-title has-text-centered">Experimental Results</h2>
 
         <!-- ========================================================= -->
